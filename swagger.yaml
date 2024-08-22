@@ -1,0 +1,226 @@
+openapi: 3.0.3
+info:
+  title: Product Management API
+  description: API for managing products in the inventory.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/
+    description: Local server
+
+tags:
+  - name: products
+    description: Everything about managing products
+
+paths:
+  /product:
+    post:
+      tags:
+        - products
+      summary: Add a new product
+      description: Create a new product by providing `name`, `color`, and `price`.
+      requestBody:
+        description: Product object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the product
+                  example: T-shirt
+                color:
+                  type: string
+                  description: The color of the product
+                  example: red
+                price:
+                  type: number
+                  description: The price of the product
+                  example: 19.99
+              required:
+                - name
+                - color
+                - price
+      responses:
+        '200':
+          description: Product added successfully
+        '400':
+          description: Invalid input
+  /products:
+    post:
+      tags:
+        - products
+      summary: Add new products
+      description: Create a new product in the inventory.
+      requestBody:
+        description: Product object that needs to be added to the store
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Product added successfully
+        '400':
+          description: Invalid input
+    get:
+      tags:
+        - products
+      summary: Get all products
+      description: Retrieve a list of products with pagination and sorting options.
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+        - name: page_size
+          in: query
+          description: Number of products per page
+          required: false
+          schema:
+            type: integer
+        - name: sort_order
+          in: query
+          description: Order of sorting (asc or desc)
+          required: false
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          description: Field to sort by
+          required: false
+          schema:
+            type: string
+        - name: search
+          in: query
+          description: Search term for filtering products by name
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+                  total_products:
+                    type: integer
+                  page:
+                    type: integer
+                  page_size:
+                    type: integer
+        '400':
+          description: Invalid request
+    put:
+      tags:
+        - products
+      summary: Update an existing product
+      description: Update a product by its ID, sending data through query parameters.
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: ID of the product to update
+          schema:
+            type: string
+        - name: name
+          in: query
+          description: The name of the product
+          required: false
+          schema:
+            type: string
+          example: T-shirt
+        - name: color
+          in: query
+          description: The color of the product
+          required: false
+          schema:
+            type: string
+          example: blue
+        - name: price
+          in: query
+          description: The price of the product
+          required: false
+          schema:
+            type: number
+          example: 29.99
+      responses:
+        '200':
+          description: Product updated successfully
+        '400':
+          description: Invalid request or missing required parameters
+        '404':
+          description: Product not found
+  /products/{id}:
+    get:
+      tags:
+        - products
+      summary: Get a product by ID
+      description: Retrieve a specific product by its ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the product to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+    delete:
+      tags:
+        - products
+      summary: Delete a product
+      description: Remove a product from the inventory by its ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the product to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product deleted successfully
+        '404':
+          description: Product not found
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The product ID
+        name:
+          type: string
+          description: The name of the product
+        color:
+          type: string
+          description: The color of the product
+        price:
+          type: number
+          description: The price of the product
