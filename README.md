@@ -12,6 +12,7 @@ Before you begin, ensure you have the following installed:
 - [Node.js](https://nodejs.org/) (version 14 or higher)
 - [Npm](https://www.npmjs.com/) (Node Package Manager)
 - A [MongoDB](https://www.mongodb.com/) database (either a local instance or a MongoDB Atlas cloud database)
+- [Prisma ORM](https://www.prisma.io/) ORM for connecting to the database
 ## Installation
 
 Follow these steps to set up and run the project locally:
